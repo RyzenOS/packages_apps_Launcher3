@@ -42,4 +42,9 @@
         android:summary="@string/suggestion_pref_screen_desc">
         <intent android:action="android.settings.ACTION_CONTENT_SUGGESTIONS_SETTINGS" />
 
+    <com.android.launcher3.settings.preference.RestartPreference
+        android:key="pref_restart"
+        android:title="@string/pref_restart_title"
+        android:summary="@string/pref_restart_summary" />
+        
 </androidx.preference.PreferenceScreen>
