@@ -167,4 +167,8 @@
     <!-- Restart launcher -->
     <string name="pref_restart_title">Restart</string>
     <string name="pref_restart_summary">Restart the launcher manually to apply any pending settings</string>
+
+    <!-- Taskbar -->
+    <string name="pref_allow_phone_taskbar_title">Use taskbar</string>
+    <string name="pref_allow_phone_taskbar_summary">For opening and switching apps anywhere</string>
 </resources>
