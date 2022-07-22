@@ -159,6 +159,7 @@ public final class Utilities {
     public static final String KEY_STATUS_BAR = "pref_show_statusbar";
     public static final String KEY_RECENTS_OPACITY = "pref_recents_opacity";
     public static final String KEY_APP_DRAWER_OPACITY = "pref_app_drawer_opacity";
+    public static final String KEY_RECENTS_MEMINFO = "pref_recents_meminfo";
 
     /**
      * Returns true if theme is dark.
@@ -824,4 +825,9 @@ public final class Utilities {
         SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
         return prefs.getInt(KEY_APP_DRAWER_OPACITY, 80);
     }
+
+    public static boolean isShowMeminfo(Context context) {
+        SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
+        return prefs.getBoolean(KEY_RECENTS_MEMINFO, false);
+   }
 }
