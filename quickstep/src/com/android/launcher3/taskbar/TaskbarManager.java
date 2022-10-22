@@ -214,6 +214,8 @@ public class TaskbarManager {
      */
     public void onUserUnlocked() {
         mUserUnlocked = true;
+        SharedPreferences prefs = LauncherPrefs.getPrefs(mContext);
+        prefs.registerOnSharedPreferenceChangeListener(this);
         recreateTaskbar();
     }
 
