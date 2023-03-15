@@ -20,6 +20,7 @@ import static androidx.core.view.accessibility.AccessibilityNodeInfoCompat.ACTIO
 
 import static com.android.launcher3.Utilities.KEY_DOCK_SEARCH;
 import static com.android.launcher3.Utilities.KEY_SMARTSPACE;
+import static com.android.launcher3.config.FeatureFlags.IS_STUDIO_BUILD;
 import static com.android.launcher3.states.RotationHelper.ALLOW_ROTATION_PREFERENCE_KEY;
 
 import static com.android.launcher3.OverlayCallbackImpl.KEY_ENABLE_MINUS_ONE;
@@ -57,6 +58,7 @@ import com.android.launcher3.DeviceProfile;
 import com.android.launcher3.InvariantDeviceProfile;
 import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.LauncherFiles;
+import com.android.launcher3.LauncherPrefs;
 import com.android.launcher3.R;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.customization.IconDatabase;
@@ -65,6 +67,7 @@ import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.model.WidgetsModel;
 import com.android.launcher3.states.RotationHelper;
 import com.android.launcher3.uioverrides.plugins.PluginManagerWrapper;
+import com.android.launcher3.util.DisplayController;
 
 import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
 
@@ -125,7 +128,8 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
             // Display the fragment as the main content.
             fm.beginTransaction().replace(com.android.settingslib.widget.R.id.content_frame, f).commit();
         }
-        Utilities.getPrefs(getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
+        LauncherPrefs.getPrefs(getApplicationContext())
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     /**
@@ -257,9 +261,11 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
                     if (category.getPreferenceCount() == 0) {
                         screen.removePreference(category);
                     }
-                } else if (!initPreference(preference, screen)) {
+                } if (!initPreference(preference, screen)) {
                     screen.removePreference(preference);
-                }
+                } else if (IS_STUDIO_BUILD && preference == mDeveloperOptionPref) {
+                        preference.setOrder(0);
+                    }
             }
 
             if (getActivity() != null && !TextUtils.isEmpty(getPreferenceScreen().getTitle())) {
@@ -319,15 +325,14 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
                     return !WidgetsModel.GO_DISABLE_NOTIFICATION_DOTS;
 
                 case ALLOW_ROTATION_PREFERENCE_KEY:
-                    DeviceProfile deviceProfile = InvariantDeviceProfile.INSTANCE.get(
-                            getContext()).getDeviceProfile(getContext());
-                    if (deviceProfile.isTablet) {
+                    DisplayController.Info info =
+                            DisplayController.INSTANCE.get(getContext()).getInfo();
+                    if (info.isTablet(info.realBounds)) {
                         // Launcher supports rotation by default. No need to show this setting.
                         return false;
                     }
                     // Initialize the UI once
-                    preference.setDefaultValue(
-                            RotationHelper.getAllowRotationDefaultValue(deviceProfile));
+                    preference.setDefaultValue(RotationHelper.getAllowRotationDefaultValue(info));
                     return true;
 
                 case FLAGS_PREFERENCE_KEY:

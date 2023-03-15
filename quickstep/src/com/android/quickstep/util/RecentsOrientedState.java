@@ -140,7 +140,7 @@ public class RecentsOrientedState implements
     public RecentsOrientedState(Context context, BaseActivityInterface sizeStrategy,
             IntConsumer rotationChangeListener) {
         mContext = context;
-        mSharedPrefs = Utilities.getPrefs(context);
+        mSharedPrefs = LauncherPrefs.getPrefs(context);
         mOrientationListener = new OrientationEventListener(context) {
             @Override
             public void onOrientationChanged(int degrees) {

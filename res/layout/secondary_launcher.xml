@@ -42,8 +42,7 @@
         android:contentDescription="@string/all_apps_button_label"
         android:onClick="onAppsButtonClicked" />
 
-    <view
-        class="com.android.launcher3.allapps.SecondaryLauncherAllAppsContainerView"
+    <com.android.launcher3.allapps.SecondaryLauncherAllAppsContainerView
         android:id="@+id/apps_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
